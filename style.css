@@ -309,3 +309,77 @@ ul {
     margin-right: 0;
     margin-left: 5px;
 }
+
+                /* AUTORIZATION MODAL */
+
+.autorization {
+    box-sizing: border-box;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 515px;
+    height: 550px;
+    background-color: #17212b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 10px;
+}
+.autorization__button {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: url(./Screenshot.png) center center / cover no-repeat;
+}
+.autorization__headline {
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.autorization__title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.autorization__descript {
+    width: 300px;
+    color: #758698;
+}
+.input-name {
+    width: 300px;
+    height: 40px;
+    background-color: #17212b;
+    border-bottom: 1px #758698 solid;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+}
+.input-name:focus {
+    border-bottom: 1px #5288c1 solid;
+}
+.input-nick {
+    width: 300px;
+    height: 40px;
+    background-color: #17212b;
+    border-bottom: 1px #758698 solid;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+}
+.input-nick:focus {
+    border-bottom: 1px #5288c1 solid;
+}
+.autorization__submit-button {
+    padding: 12px 40px;
+    background-color: #5288c1;
+    border-radius: 3px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
