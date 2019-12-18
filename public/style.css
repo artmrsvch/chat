@@ -327,6 +327,29 @@ ul {
     justify-content: space-between;
     padding: 40px 10px;
 }
+.autorization-close {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
+.autorization-close__btn {
+    position: relative;
+    min-width: 20px;
+    height: 2px;
+    background-color: #6c7883;
+    transform: rotate(45deg);
+}
+.autorization-close__btn::before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0;
+    transform: rotate(90deg);
+    min-width: 20px;
+    height: 2px;
+    background-color: #6c7883;
+}
 .autorization__button {
     width: 140px;
     height: 140px;

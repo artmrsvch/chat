@@ -1,0 +1,32 @@
+{
+  "name": "node-chat",
+  "version": "1.0.0",
+  "description": "chat with websoket",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artmrsvch/chat.git"
+  },
+  "keywords": [
+    "node",
+    "soket",
+    "chat"
+  ],
+  "author": "Artem_Zabirov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artmrsvch/chat/issues"
+  },
+  "homepage": "https://github.com/artmrsvch/chat#readme"
+}
