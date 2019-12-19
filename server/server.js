@@ -20,15 +20,19 @@ io.sockets.on('connection', socket => {
         io.sockets.emit('usersList', users)
     });
     socket.on('userMessage', data => {
-        console.log(data.fio, data.nick, data.msg)
-        users.forEach(user => {  //Присваиваем последнее сообщение в массив юзеров
-            if (user.nick == data.nick) {
-                user.msg = data.msg
-            }
-        })
-        socket.emit('messageAppend',data)
+        io.sockets.emit('appendDialog', data);
+        appendUser(data);
     });
 })
 server.listen(port, ()=> {
     console.log(`HELLOW FIRST SERVAK NA PORTY ${port}`);
 })
+
+function appendUser (data) {
+    users.forEach(user => {
+        if (user.nick == data.nick) {
+            user.msg = data.msg
+        }
+    });
+    io.sockets.emit('usersList', users);
+}

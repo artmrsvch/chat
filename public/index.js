@@ -7,6 +7,9 @@ const chatMessage = document.querySelector('.chat-block__textarea');
 const sendChatMessage = document.querySelector('.chat-block__submit-button');
 const userList = document.querySelector('.info-block__user-list');
 
+const quantityUser = document.querySelector('.chat-block__user-quantity');
+const chatList = document.querySelector('.chat');
+
 let loginInfo = new Object;
 
 autorizModal.addEventListener('click', function (e) {
@@ -28,21 +31,100 @@ autorizModal.addEventListener('click', function (e) {
 
 function appendUser (user) {
     const userItem = document.createElement('li');
-
+    if (!user.msg) {
+        user.msg = 'Присоеденился к чату';
+    }
     userItem.classList.add('info-block__user-item');
     userItem.innerHTML = `<div class="info-block__user-avatar"></div>
     <div class="info-block__user-data">
         <span class="info-block__user-name">${user.fio}</span>
-        <span class="info-block__user-lastMassege">Тут будет ласт сообщение</span>
+        <span class="info-block__user-lastMassege">${user.msg}</span>
     </div>`;
     userList.appendChild(userItem);
 }
+
+function appendMessage (update) {
+    if (update.nick == loginInfo.nick) { 
+        const chatItem = document.createElement('li');
+        if (!chatList.children.length) {
+            chatItem.classList.add('chat-user', 'chat-user_me');                                     
+            addNewBlock(update, chatItem);
+        } else {
+            if (chatList.lastElementChild.classList.contains('chat-user_me')) {
+                addNewBlock(update);
+            } else {                                                             
+                chatItem.classList.add('chat-user', 'chat-user_me');                                     
+                addNewBlock(update, chatItem);
+            }
+        }                           
+    } else {      
+        let lastNodeMessage;
+        try {
+            lastNodeMessage = chatList.lastElementChild.children[1].lastElementChild.firstElementChild
+        } catch (e) {
+            lastNodeMessage = '';
+        }
+        let userNodeName;
+
+        for (let node of userList.children) {
+            console.log (node.children[1].children[1].textContent)
+            console.log (lastNodeMessage.textContent)
+            if (node.children[1].children[1].textContent == lastNodeMessage.textContent) {
+                console.log('ЗАШЕЛ В ИФ ЦИКЛА, УСЛОВИЕ СРАБОТАЛО')
+                userNodeName = node.children[1].children[0].textContent;
+                break;
+            } 
+        }
+        console.log(userNodeName, update.fio)
+        if(userNodeName == update.fio) {
+            addNewBlock(update);
+        } else {
+            const chatItem = document.createElement('li');
+            chatItem.classList.add('chat-user');                                     
+            addNewBlock(update, chatItem);
+        }
+    }
+}
+
+function addNewBlock (userData, newLi) {
+    if (!newLi) {
+        const chatItemContent = chatList.lastElementChild.children[1];
+        const chatDivContain = document.createElement('div');
+        chatDivContain.classList.add('chat-message');
+        chatDivContain.innerHTML = `<span class="chat-message__text">${userData.msg}</span>
+        <span class="chat-message__time">${userData.date}</span>`;
+        chatItemContent.appendChild(chatDivContain);
+    } else {
+        newLi.innerHTML = `<div class="chat-user__avatar"></div>
+        <div class="chat-user__content">
+            <div class="chat-message">
+                <span class="chat-message__text">${userData.msg}</span>
+                <span class="chat-message__time">${userData.date}</span>
+            </div>
+        </div>`
+        chatList.appendChild(newLi);
+    }
+}
+
+function formatDate(date) {
+
+    let mi = date.getMinutes();
+    if (mi < 10) mi = '0' + mi;
+
+    let hr = date.getHours();
+    if (hr < 10) hr = '0' + hr;
+    
+    return hr +':'+ mi;
+}
+
 sendChatMessage.addEventListener('click', ()=>{
     if (chatMessage.value != '') {
+        let thisDate = formatDate(new Date);
         socket.emit('userMessage', { 
             fio: loginInfo.fio,
             nick: loginInfo.nick,
-            msg: chatMessage.value
+            msg: chatMessage.value,
+            date: thisDate
          });
          chatMessage.value = '';
     } else {
@@ -51,15 +133,15 @@ sendChatMessage.addEventListener('click', ()=>{
 })
 
 socket.on('connection', (socket) => {
-    console.log(socket);
-    
+    console.log(socket); 
 })
-socket.on('messageAppend', (data) => {
-    console.log(data)
+socket.on('appendDialog', (data) => {
+    appendMessage(data);
 })
 socket.on('usersList', users => {
     userList.innerHTML = '';
     users.forEach(user => {
     appendUser(user)
     });
+    quantityUser.textContent = `Участников: ${userList.children.length}`;
 })
