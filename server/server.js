@@ -25,6 +25,10 @@ io.sockets.on('connection', socket => {
                     flag = true;
                     elem.id = socket.id
                     activeUsers.push(elem);
+                    socket.emit('parse', {
+                        logs: elem.chatlog,
+                        photo: elem.photo
+                    });
                 }
             })
             if (!flag) {
@@ -42,6 +46,13 @@ io.sockets.on('connection', socket => {
         io.sockets.emit('appendDialog', data);
         appendUser(data);
     });
+    socket.on('cookie', cooc => {
+        memoryUsers.forEach(mUser => {
+            if (mUser.fio == cooc.fio && mUser.nick == cooc.nick) {
+                mUser.chatlog = cooc.chatlog
+            }
+        })
+    })
     socket.on('disconnect', () => {
         activeUsers.forEach( userItem => {
             if (userItem.id == socket.id) {

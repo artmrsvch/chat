@@ -265,7 +265,7 @@ ul {
     min-height: 33px;
     max-height: 33px;
     border-radius: 50%;
-    background-image: url(./56678.jpg);
+    background-image: url(./no-image.jpg);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -409,4 +409,28 @@ ul {
     color: #fff;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+                    /* DOWNLOAD PHOTO */
+        
+.photo-download {
+    box-sizing: border-box;
+    width: 365px;
+    height: 450px;
+    background-color: #17212b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 40px 20px 40px;
+}
+.photo-download__main {
+    width: 100%;
+    height: 68.9%;
+}
+.photo-download__img {
+    width: 100%;
+    height: 100%;
+}
+.photo-download__subtitle {
+    color: #758698;
 }

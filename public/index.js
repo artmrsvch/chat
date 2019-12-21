@@ -1,5 +1,6 @@
 const socket = io();
 const fileReader = new FileReader;
+const sessions = sessionStorage;
 
 const autorizModal = document.querySelector('.autorization');
 const autorizName = document.querySelector('.input-name');
@@ -22,10 +23,18 @@ autorizModal.addEventListener('click', function (e) {
         //this.style.display = 'none'
     } else if (e.target.className == 'autorization__submit-button') {
         if (autorizName.value && autorizNick.value != '') {
+            let photo;
+
+            if (fileReader.result == null) {
+                photo = './no-image.jpg'
+            } else {
+                photo = fileReader.result
+            }
+            
             loginInfo = {
                 fio: autorizName.value,
                 nick: autorizNick.value,
-                photo: fileReader.result
+                photo: photo
             };
             socket.emit('userLogin', loginInfo);
             this.style.display = 'none'
@@ -168,11 +177,21 @@ sendChatMessage.addEventListener('click', ()=>{
 
 socket.on('appendDialog', (data) => {
     appendMessage(data);
+    socket.emit('cookie', {
+        nick: loginInfo.nick,
+        fio: loginInfo.fio,
+        chatlog: chatList.innerHTML  
+    })
 })
+
 socket.on('usersList', users => {
     userList.innerHTML = '';
     users.forEach(user => {
         appendUser(user)
     });
     quantityUser.textContent = `Участников: ${userList.children.length}`;
+})
+socket.on('parse', cooks => {
+    loginInfo.photo = cooks.photo;
+    chatList.innerHTML = cooks.logs;
 })
