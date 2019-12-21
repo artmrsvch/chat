@@ -1,7 +1,12 @@
 const socket = io();
+const fileReader = new FileReader;
+
 const autorizModal = document.querySelector('.autorization');
 const autorizName = document.querySelector('.input-name');
 const autorizNick = document.querySelector('.input-nick');
+const autorizPhoto = document.querySelector('.file-box');
+
+const photoInputBox = document.querySelector('.file-box');
 
 const chatMessage = document.querySelector('.chat-block__textarea');
 const sendChatMessage = document.querySelector('.chat-block__submit-button');
@@ -19,7 +24,8 @@ autorizModal.addEventListener('click', function (e) {
         if (autorizName.value && autorizNick.value != '') {
             loginInfo = {
                 fio: autorizName.value,
-                nick: autorizNick.value
+                nick: autorizNick.value,
+                photo: fileReader.result
             };
             socket.emit('userLogin', loginInfo);
             this.style.display = 'none'
@@ -29,13 +35,42 @@ autorizModal.addEventListener('click', function (e) {
     }
 })
 
+fileReader.addEventListener('load', () => {
+    photoInputBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`
+})
+
+photoInputBox.addEventListener('change', (e) => {
+    changeFile (e.target.files)
+})
+photoInputBox.addEventListener('dragover', (e) => {
+    e.preventDefault();
+})
+photoInputBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    changeFile (e.dataTransfer.files)
+})
+function changeFile (e) {
+    const [file] = e;
+    if (file) {
+        if (file.size > 512 * 1024 || file.type != 'image/jpeg') {
+            if (file.size > 512 * 1024) {
+                alert('Размер файла не должен превышать 512кб')
+            } else {
+                alert ('Можно загружать только JPEG файлы')
+            }
+        } else {
+            fileReader.readAsDataURL(file);
+        }
+    }    
+}
+
 function appendUser (user) {
     const userItem = document.createElement('li');
     if (!user.msg) {
         user.msg = 'Присоеденился к чату';
     }
     userItem.classList.add('info-block__user-item');
-    userItem.innerHTML = `<div class="info-block__user-avatar"></div>
+    userItem.innerHTML = `<div class="info-block__user-avatar" style="background-image: url(${user.photo})"></div>
     <div class="info-block__user-data">
         <span class="info-block__user-name">${user.fio}</span>
         <span class="info-block__user-lastMassege">${user.msg}</span>
@@ -91,7 +126,7 @@ function addNewBlock (userData, newLi) {
         <span class="chat-message__time">${userData.date}</span>`;
         chatItemContent.appendChild(chatDivContain);
     } else {
-        newLi.innerHTML = `<div class="chat-user__avatar"></div>
+        newLi.innerHTML = `<div class="chat-user__avatar" style="background-image: url(${userData.photo})"></div>
         <div class="chat-user__content">
             <div class="chat-message">
                 <span class="chat-message__text">${userData.msg}</span>
@@ -113,13 +148,16 @@ function formatDate(date) {
     return hr +':'+ mi;
 }
 
+
 sendChatMessage.addEventListener('click', ()=>{
     if (chatMessage.value != '') {
         let thisDate = formatDate(new Date);
+
         socket.emit('userMessage', { 
             fio: loginInfo.fio,
             nick: loginInfo.nick,
             msg: chatMessage.value,
+            photo: loginInfo.photo,
             date: thisDate
          });
          chatMessage.value = '';
@@ -134,7 +172,7 @@ socket.on('appendDialog', (data) => {
 socket.on('usersList', users => {
     userList.innerHTML = '';
     users.forEach(user => {
-    appendUser(user)
+        appendUser(user)
     });
     quantityUser.textContent = `Участников: ${userList.children.length}`;
 })

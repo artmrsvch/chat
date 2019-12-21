@@ -20,7 +20,7 @@
         <div class="chat-block">
             <div class="chat-block__headline">
                 <span class="chat-block__title">Чат</span>
-                <span class="chat-block__user-quantity">2 участника</span>
+                <span class="chat-block__user-quantity"></span>
             </div>
             <ul class="chat"></ul>
             <form action="" class="chat-block__submit">
@@ -33,7 +33,9 @@
         <div class="autorization-close">
             <button class="autorization-close__btn" type="button"></button>
         </div>
-        <a href="" class="autorization__button"></a>
+        <label class="file-box">
+            <input type="file" class="file-box__upload">
+        </label>
         <div class="autorization__headline">
             <span class="autorization__title">Авторизация</span>
             <span class="autorization__descript">Введите пожалуйста своё фио и ник для дальнейшей авторизации</span>
@@ -41,6 +43,9 @@
         <input type="text" class="input-name" placeholder="Введите своё имя">
         <input type="text" class="input-nick" placeholder="Введите свой ник">
         <button type="button" class="autorization__submit-button">войти</button>
+    </div>
+    <div class="photo-download">
+        
     </div>
     <script src="socket.io/socket.io.js"></script>
     <script src="index.js"></script>

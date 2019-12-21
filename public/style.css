@@ -350,11 +350,15 @@ ul {
     height: 2px;
     background-color: #6c7883;
 }
-.autorization__button {
+.file-box {
+    cursor: pointer;
     width: 140px;
     height: 140px;
     border-radius: 50%;
     background: url(./Screenshot.png) center center / cover no-repeat;
+}
+.file-box__upload {
+    display: none;
 }
 .autorization__headline {
     display: flex;

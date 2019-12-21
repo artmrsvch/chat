@@ -12,36 +12,43 @@ const port = process.env.PORT || 4500;
 
 app.use(express.static(publicPath));
 
-let logInusers = new Array;
-let signInUsers = new Array;
+let activeUsers = new Array;
+let memoryUsers = new Array;
 
 io.sockets.on('connection', socket => {
     socket.on('userLogin', user => {
-        if (signInUsers.length) {
+        user.id = socket.id
+        if (memoryUsers.length) {
             let flag;
-            signInUsers.forEach(elem => {
+            memoryUsers.forEach(elem => {
                 if (elem.nick == user.nick && elem.fio == user.fio) {
                     flag = true;
-                    logInusers.push(elem);
+                    elem.id = socket.id
+                    activeUsers.push(elem);
                 }
             })
             if (!flag) {
-                signInUsers.push(user);
-                logInusers.push(user);
+                memoryUsers.push(user);
+                activeUsers.push(user);
                 flag = false;
             }
         } else {
-            signInUsers.push(user);
-            logInusers.push(user);
+            memoryUsers.push(user);
+            activeUsers.push(user);
         }
-        io.sockets.emit('usersList', logInusers)
+        io.sockets.emit('usersList', activeUsers)
     });
     socket.on('userMessage', data => {
         io.sockets.emit('appendDialog', data);
         appendUser(data);
     });
-    socket.on('disconnect', recall => {
-        console.log(recall)
+    socket.on('disconnect', () => {
+        activeUsers.forEach( userItem => {
+            if (userItem.id == socket.id) {
+                activeUsers.splice(activeUsers.indexOf(userItem), 1);
+                io.sockets.emit('usersList', activeUsers)
+            }
+        });
     })
 })
 server.listen(port, ()=> {
@@ -49,10 +56,10 @@ server.listen(port, ()=> {
 })
 
 function appendUser (data) {
-    logInusers.forEach(user => {
+    activeUsers.forEach(user => {
         if (user.nick == data.nick) {
             user.msg = data.msg
         }
     });
-    io.sockets.emit('usersList', logInusers);
+    io.sockets.emit('usersList', activeUsers);
 }
