@@ -67,15 +67,11 @@ function appendMessage (update) {
         let userNodeName;
 
         for (let node of userList.children) {
-            console.log (node.children[1].children[1].textContent)
-            console.log (lastNodeMessage.textContent)
             if (node.children[1].children[1].textContent == lastNodeMessage.textContent) {
-                console.log('ЗАШЕЛ В ИФ ЦИКЛА, УСЛОВИЕ СРАБОТАЛО')
                 userNodeName = node.children[1].children[0].textContent;
                 break;
             } 
         }
-        console.log(userNodeName, update.fio)
         if(userNodeName == update.fio) {
             addNewBlock(update);
         } else {
@@ -132,9 +128,6 @@ sendChatMessage.addEventListener('click', ()=>{
     }
 })
 
-socket.on('connection', (socket) => {
-    console.log(socket); 
-})
 socket.on('appendDialog', (data) => {
     appendMessage(data);
 })
