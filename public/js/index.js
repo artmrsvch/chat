@@ -1,17 +1,12 @@
-//import './style.css';
-//import {appendMessage, appendUser} from './modules/appends';
-
 const socket = io();
 const fileReader = new FileReader;
 
 const autorizModal = document.querySelector('.autorization');
 const autorizName = document.querySelector('.input-name');
 const autorizNick = document.querySelector('.input-nick');
-const autorizPhoto = document.querySelector('.file-box');
 
 const photoInputBox = document.querySelector('.file-box');
 const photoModalBox = document.querySelector('.photo-download__main');
-const modalDownloadImg = document.querySelector('.photo-download');
 
 const chatMessage = document.querySelector('.chat-block__textarea');
 const sendChatMessage = document.querySelector('.chat-block__submit-button');
@@ -83,7 +78,7 @@ document.body.addEventListener('click', (e)=>{
                 let photo;
     
                 if (fileReader.result == null) {
-                    photo = './no-image.jpg'
+                    photo = '../img/no-image.jpg'
                 } else {
                     photo = fileReader.result
                 }

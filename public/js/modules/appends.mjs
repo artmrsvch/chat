@@ -62,4 +62,4 @@ function addNewBlock (userData, newLi) {
     }
 }
 
-module.export = {appendMessage, appendUser}
+export {appendUser}

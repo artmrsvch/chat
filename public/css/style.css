@@ -267,7 +267,7 @@ ul {
     min-height: 33px;
     max-height: 33px;
     border-radius: 50%;
-    background-image: url(./no-image.jpg);
+    background-image: url(../img/no-image.jpg);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -357,7 +357,7 @@ ul {
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    background: url(./Screenshot.png) center center / cover no-repeat;
+    background: url(../img/Screenshot.png) center center / cover no-repeat;
 }
 .file-box__upload {
     display: none;
@@ -434,7 +434,7 @@ ul {
     width: 100%;
     height: 68.9%;  
     border-radius: 50%; 
-    background-image: url(./no-image.jpg);
+    background-image: url(../img/no-image.jpg);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -501,7 +501,7 @@ ul {
     min-height: 75px;
     border-radius: 50%; 
     margin-right: 15px;
-    background-image: url(./no-image.jpg);
+    background-image: url(../img/no-image.jpg);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;

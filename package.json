@@ -8,9 +8,10 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2",
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.7.6",
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/node": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -25,6 +26,7 @@
     "handlebars": "^4.1.2",
     "handlebars-loader": "^1.7.1",
     "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^2.0.2",
     "puppeteer": "^1.3.0",
     "style-loader": "^0.23.1",
     "uglifyjs-webpack-plugin": "^2.1.3",
@@ -48,6 +50,7 @@
     "soket",
     "chat"
   ],
+  "type": "module",
   "author": "Artem_Zabirov",
   "license": "ISC",
   "bugs": {
