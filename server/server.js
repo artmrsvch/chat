@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 const publicPath = path.join(__dirname, '../public');
-const port = process.env.PORT || 4500;
+const port = process.env.PORT || 8080;
 
 app.use(express.static(publicPath));
 
@@ -60,6 +60,19 @@ io.sockets.on('connection', socket => {
                 io.sockets.emit('usersList', activeUsers)
             }
         });
+    })
+    socket.on('downloadPhoto', obj => {
+        activeUsers.forEach(item => {
+            if(item.fio == obj.fio && item.nick == obj.nick) {
+                item.photo = obj.photo;
+            }
+        })
+        memoryUsers.forEach(item => {
+            if(item.fio == obj.fio && item.nick == obj.nick) {
+                item.photo = obj.photo;
+            }
+        })
+        io.sockets.emit('refreshPhoto', obj)
     })
 })
 server.listen(port, ()=> {

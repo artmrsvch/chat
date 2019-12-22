@@ -1,6 +1,8 @@
+//import './style.css';
+//import {appendMessage, appendUser} from './modules/appends';
+
 const socket = io();
 const fileReader = new FileReader;
-const sessions = sessionStorage;
 
 const autorizModal = document.querySelector('.autorization');
 const autorizName = document.querySelector('.input-name');
@@ -20,32 +22,6 @@ const chatList = document.querySelector('.chat');
 
 let loginInfo = new Object;
 
-autorizModal.addEventListener('click', function (e) {
-    if (e.target.className == 'autorization-close__btn') {
-        //this.style.display = 'none'
-    } else if (e.target.className == 'autorization__submit-button') {
-        if (autorizName.value && autorizNick.value != '') {
-            let photo;
-
-            if (fileReader.result == null) {
-                photo = './no-image.jpg'
-            } else {
-                photo = fileReader.result
-            }
-            
-            loginInfo = {
-                fio: autorizName.value,
-                nick: autorizNick.value,
-                photo: photo
-            };
-            socket.emit('userLogin', loginInfo);
-            this.style.display = 'none'
-        } else {
-            alert('Поля ФИО и Ник должны быть заполнены!')
-        }  
-    }
-})
-
 fileReader.addEventListener('load', () => {
     photoInputBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`;
     photoModalBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`;
@@ -63,7 +39,9 @@ photoInputBox.addEventListener('drop', (e) => {
     changeFile (e.dataTransfer.files)
 })
 
-
+photoModalBox.addEventListener('change', (e) => {
+    changeFile (e.target.files)
+})
 photoModalBox.addEventListener('dragover', (e) => {
     e.preventDefault();
 })
@@ -71,23 +49,58 @@ photoModalBox.addEventListener('drop', (e) => {
     e.preventDefault();
     changeFile (e.dataTransfer.files)
 })
-modalDownloadImg.addEventListener('click', function (e) {
-    if (e.target.className == 'photo-download_btn-cancel') {
-        this.style.display = 'none'
-    } else if (e.target.className == 'photo-download_btn-save') {
 
-    }
-})
-
-document.querySelector('.container').addEventListener('click', (e)=>{
-    if (e.target.className == 'info-block__gamburger') {
-        userList.style.display = 'none'
-        document.querySelector('.user-info').style.display = 'flex'
-    } else if (e.target.className == 'user-info__img') {
-        document.querySelector('.photo-download').style.display = 'flex'
-    } else if (e.target.className == 'user-info__close') {
-        userList.style.display = 'flex'
-        document.querySelector('.user-info').style.display = 'none'
+document.body.addEventListener('click', (e)=>{
+    switch (e.target.className) {
+        case 'info-block__gamburger':
+            userList.style.display = 'none';
+            document.querySelector('.user-info').style.display = 'flex';
+            break;
+        case 'user-info__img':
+            document.querySelector('.photo-download').style.display = 'flex';
+            break;
+        case 'user-info__close':
+            userList.style.display = 'flex';
+            document.querySelector('.user-info').style.display = 'none';
+            break;
+        case 'photo-download__btn-cancel':
+            document.querySelector('.photo-download').style.display = 'none';
+            break;  
+        case 'photo-download__btn-save':
+            loginInfo.photo = fileReader.result;
+            socket.emit('downloadPhoto', {
+                nick: loginInfo.nick,
+                fio: loginInfo.fio,
+                photo: loginInfo.photo
+            })
+            document.querySelector('.user-info__img').style.background = `url(${loginInfo.photo}) center center / cover no-repeat`;
+            document.querySelector('.photo-download').style.display = 'none';
+            break; 
+        case 'autorization-close__btn':
+            break;
+        case 'autorization__submit-button':
+            if (autorizName.value && autorizNick.value != '') {
+                let photo;
+    
+                if (fileReader.result == null) {
+                    photo = './no-image.jpg'
+                } else {
+                    photo = fileReader.result
+                }
+                
+                loginInfo = {
+                    fio: autorizName.value,
+                    nick: autorizNick.value,
+                    photo: photo
+                };
+                socket.emit('userLogin', loginInfo);
+                document.querySelector('.user-info__img').style.background = `url(${photo}) center center / cover no-repeat`;
+                document.querySelector('.user-info__name').textContent = loginInfo.fio;
+                autorizModal.style.display = 'none'
+            } else {
+                alert('Поля ФИО и Ник должны быть заполнены!')
+            }  
+            break;
     }
 })
 function changeFile (e) {
@@ -120,8 +133,8 @@ function appendUser (user) {
 }
 
 function appendMessage (update) {
+    const chatItem = document.createElement('li');
     if (update.nick == loginInfo.nick) { 
-        const chatItem = document.createElement('li');
         if (!chatList.children.length) {
             chatItem.classList.add('chat-user', 'chat-user_me');                                     
             addNewBlock(update, chatItem);
@@ -133,27 +146,17 @@ function appendMessage (update) {
                 addNewBlock(update, chatItem);
             }
         }                           
-    } else {      
-        let lastNodeMessage;
-        try {
-            lastNodeMessage = chatList.lastElementChild.children[1].lastElementChild.firstElementChild
-        } catch (e) {
-            lastNodeMessage = '';
-        }
-        let userNodeName;
-
-        for (let node of userList.children) {
-            if (node.children[1].children[1].textContent == lastNodeMessage.textContent) {
-                userNodeName = node.children[1].children[0].textContent;
-                break;
-            } 
-        }
-        if(userNodeName == update.fio) {
-            addNewBlock(update);
-        } else {
-            const chatItem = document.createElement('li');
+    } else {
+        if (!chatList.children.length) {
             chatItem.classList.add('chat-user');                                     
             addNewBlock(update, chatItem);
+        } else {
+            if (chatList.lastElementChild.getAttribute('nick') == update.nick) {
+                addNewBlock(update);
+            }  else {
+                chatItem.classList.add('chat-user');                                     
+                addNewBlock(update, chatItem);
+            }
         }
     }
 }
@@ -167,6 +170,7 @@ function addNewBlock (userData, newLi) {
         <span class="chat-message__time">${userData.date}</span>`;
         chatItemContent.appendChild(chatDivContain);
     } else {
+        newLi.setAttribute('nick', userData.nick);
         newLi.innerHTML = `<div class="chat-user__avatar" style="background-image: url(${userData.photo})"></div>
         <div class="chat-user__content">
             <div class="chat-message">
@@ -226,4 +230,16 @@ socket.on('usersList', users => {
 socket.on('parse', cooks => {
     loginInfo.photo = cooks.photo;
     chatList.innerHTML = cooks.logs;
+})
+socket.on('refreshPhoto', userObj => {
+    for (let child of userList.children) {
+        if (child.children[1].children[0].textContent == userObj.fio) {
+            child.children[0].style.background = `url(${userObj.photo}) center center / cover no-repeat`;
+        }
+    }
+    for (let child of chatList.children) {
+        if (child.getAttribute('nick') == userObj.nick) {
+            child.children[0].style.background = `url(${userObj.photo}) center center / cover no-repeat`;
+        }
+    }
 })
