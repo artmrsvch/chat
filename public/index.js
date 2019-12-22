@@ -8,6 +8,8 @@ const autorizNick = document.querySelector('.input-nick');
 const autorizPhoto = document.querySelector('.file-box');
 
 const photoInputBox = document.querySelector('.file-box');
+const photoModalBox = document.querySelector('.photo-download__main');
+const modalDownloadImg = document.querySelector('.photo-download');
 
 const chatMessage = document.querySelector('.chat-block__textarea');
 const sendChatMessage = document.querySelector('.chat-block__submit-button');
@@ -45,8 +47,10 @@ autorizModal.addEventListener('click', function (e) {
 })
 
 fileReader.addEventListener('load', () => {
-    photoInputBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`
+    photoInputBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`;
+    photoModalBox.style.background = `url(${fileReader.result}) center center / cover no-repeat`;
 })
+
 
 photoInputBox.addEventListener('change', (e) => {
     changeFile (e.target.files)
@@ -57,6 +61,34 @@ photoInputBox.addEventListener('dragover', (e) => {
 photoInputBox.addEventListener('drop', (e) => {
     e.preventDefault();
     changeFile (e.dataTransfer.files)
+})
+
+
+photoModalBox.addEventListener('dragover', (e) => {
+    e.preventDefault();
+})
+photoModalBox.addEventListener('drop', (e) => {
+    e.preventDefault();
+    changeFile (e.dataTransfer.files)
+})
+modalDownloadImg.addEventListener('click', function (e) {
+    if (e.target.className == 'photo-download_btn-cancel') {
+        this.style.display = 'none'
+    } else if (e.target.className == 'photo-download_btn-save') {
+
+    }
+})
+
+document.querySelector('.container').addEventListener('click', (e)=>{
+    if (e.target.className == 'info-block__gamburger') {
+        userList.style.display = 'none'
+        document.querySelector('.user-info').style.display = 'flex'
+    } else if (e.target.className == 'user-info__img') {
+        document.querySelector('.photo-download').style.display = 'flex'
+    } else if (e.target.className == 'user-info__close') {
+        userList.style.display = 'flex'
+        document.querySelector('.user-info').style.display = 'none'
+    }
 })
 function changeFile (e) {
     const [file] = e;

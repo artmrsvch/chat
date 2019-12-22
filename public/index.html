@@ -16,6 +16,19 @@
                 <input type="text" placeholder="Найти..." class="info-block__search">
             </div>
             <ul class="info-block__user-list"></ul>
+            <div class="user-info">
+                <div class="user-info__title">Загрузка фото</div>
+                <div class="user-info__block">
+                    <div class="user-info__img"></div>
+                    <div class="user-info__desc">
+                        <div class="user-info__name">Артем Забиров</div>
+                        <div class="user-info__status">В сети</div>
+                    </div>
+                </div>
+                <a class="user-info__close">
+                    <div class="close-wrap"></div>
+                </a>
+            </div>
         </div>
         <div class="chat-block">
             <div class="chat-block__headline">
@@ -45,9 +58,9 @@
         <button type="button" class="autorization__submit-button">войти</button>
     </div>
     <div class="photo-download">
-        <div class="photo-download__main">
-            <img src="./56678.jpg" class="photo-download__img" alt="">
-        </div>
+        <label class="photo-download__main">
+            <input type="file" class="photo-download__upload">
+        </label>
         <div class="photo-download__subtitle">
             Область для профильной фотографии
         </div>
