@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>SuperChat</title>
+</head>
+<body>
+    <div class="container">
+        <div class="info-block">
+            <div class="info-block__controls">
+                <button type="button" class="info-block__gamburger"></button>
+                <input type="text" placeholder="Найти..." class="info-block__search">
+            </div>
+            <ul class="info-block__user-list"></ul>
+            <div class="user-info">
+                <div class="user-info__title">Загрузка фото</div>
+                <div class="user-info__block">
+                    <div class="user-info__img"></div>
+                    <div class="user-info__desc">
+                        <div class="user-info__name"></div>
+                        <div class="user-info__status">В сети</div>
+                    </div>
+                </div>
+                <a class="user-info__close">
+                    <div class="close-wrap"></div>
+                </a>
+            </div>
+        </div>
+        <div class="chat-block">
+            <div class="chat-block__headline">
+                <span class="chat-block__title">Чат</span>
+                <span class="chat-block__user-quantity"></span>
+            </div>
+            <ul class="chat"></ul>
+            <form action="" class="chat-block__submit">
+                <textarea placeholder="Введите сообщение..." class="chat-block__textarea"></textarea>
+                <button type="button" class="chat-block__submit-button">Отправить</button>
+            </form>
+        </div>
+    </div>
+    <div class="autorization">
+        <div class="autorization-close">
+            <button class="autorization-close__btn" type="button"></button>
+        </div>
+        <label class="file-box">
+            <input type="file" class="file-box__upload">
+        </label>
+        <div class="autorization__headline">
+            <span class="autorization__title">Авторизация</span>
+            <span class="autorization__descript">Введите пожалуйста своё фио и ник для дальнейшей авторизации</span>
+        </div>
+        <input type="text" class="input-name" placeholder="Введите своё имя">
+        <input type="text" class="input-nick" placeholder="Введите свой ник">
+        <button type="button" class="autorization__submit-button">войти</button>
+    </div>
+    <div class="photo-download">
+        <label class="photo-download__main">
+            <input type="file" class="photo-download__upload">
+        </label>
+        <div class="photo-download__subtitle">
+            Область для профильной фотографии
+        </div>
+        <div class="photo-download__buttons">
+            <button type="button" class="photo-download__btn-cancel">ОТМЕНА</button>
+            <button type="button" class="photo-download__btn-save">СОХРАНИТЬ</button>
+        </div>
+    </div>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>
