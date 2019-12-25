@@ -1,1 +1,2 @@
-Geo-map with the ability to leave reviews that are saved when the page is reloaded.
+Реализован обмен сообщениями, возможность авторизации и загрузки файлов.
+Запуск сервера: npm run dev
